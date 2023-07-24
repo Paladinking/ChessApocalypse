@@ -12,8 +12,13 @@ public abstract class Piece {
     private MoveSet moveSet;
     private int health, power;
     private final boolean player;
-    public Piece (int x, int y, int Health, boolean player) {
+    public Piece (int x, int y, int health, boolean player) {
         this.position = new Point(x, y);
+        this.player = player;
+    }
+
+    public Piece (int health, boolean player) {
+        this.position = null;
         this.player = player;
     }
 

@@ -10,6 +10,13 @@ public class EnemyPiece extends Piece {
         super(x, y, health, false);
     }
 
+    public EnemyPiece(int health) {
+        super(health,false);
+    }
+    public static Piece generateEnemy() {
+        return new EnemyPiece(2 );
+    }
+
     @Override
     public void move(Point target) {
         setPosition(target);

@@ -19,6 +19,9 @@ public class App {
                     Rectangle r = g2d.getClipBounds();
                     final double scaling = Math.min((double)r.width / Game.SIZE.width,
                             (double) r.height / Game.SIZE.height);
+                    g2d.setClip(0, (int)(r.height - scaling * Game.SIZE.height) / 2,
+                            r.width,
+                            r.height - (int)(r.height - scaling * Game.SIZE.height));
                     g2d.scale(scaling, scaling);
                     g2d.translate((int)(r.width / scaling - Game.SIZE.width) / 2,
                             (int)(r.height / scaling - Game.SIZE.height) / 2);

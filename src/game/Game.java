@@ -15,12 +15,12 @@ public class Game implements KeyListener {
     public static final int SEED = 8888;
     public static final Random RANDOM = new Random(SEED);
 
-    private Board board = new Board();
+    private final Board board = new Board();
     List<PlayerPiece> players = new ArrayList<>();
 
     private static final double PAN_SPEED = 300.0, FAST_PAN_SPEED = 600.0;
 
-    private double cameraX = 0.0, cameraY = 0.0;
+    private double cameraX = 0.0, cameraY = Board.TILE_SIZE / 4.0;
     private boolean up, down, left, right, fastPan;
 
     boolean passTurn = false;
