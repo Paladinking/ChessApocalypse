@@ -5,8 +5,9 @@ import java.awt.*;
 public class PlayerPiece extends Piece{
     private boolean moved;
     public PlayerPiece(int x, int y, int health) {
-        super(x, y, health);
+        super(x, y, health, true);
         moved = false;
+
     }
 
     /**

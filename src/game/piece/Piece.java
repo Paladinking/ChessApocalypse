@@ -12,8 +12,9 @@ public abstract class Piece {
     private MoveSet moveSet;
     private int health;
     private boolean player;
-    public Piece (int x, int y, int Health) {
+    public Piece (int x, int y, int Health, boolean player) {
         this.position = new Point(x, y);
+        this.player = player;
     }
 
     /**
@@ -78,4 +79,8 @@ public abstract class Piece {
     }
 
     public abstract void move(Point target);
+
+    public boolean isPlayer() {
+        return player;
+    }
 }

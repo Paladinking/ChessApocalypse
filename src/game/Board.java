@@ -1,5 +1,7 @@
 package game;
 
+import game.piece.Piece;
+
 import java.awt.*;
 import java.util.HashMap;
 
@@ -22,15 +24,31 @@ public class Board {
     }
 
     public abstract static class Tile {
+        private Piece piece;
         abstract boolean isOpen();
+        abstract boolean hasPiece();
+
+        public Piece getPiece() {
+            return piece;
+        }
+
+        public void setPiece(Piece piece) {
+            this.piece = piece;
+        }
     }
 
     public static class OpenTile extends Tile {
-        String player;
         @Override
         boolean isOpen() {
-            return player != null;
+            return hasPiece();
         }
+
+        //Temp
+        @Override
+        boolean hasPiece() {
+            return getPiece() != null;
+        }
+
     }
 
     public static class BlockedTile extends Tile {
@@ -38,5 +56,13 @@ public class Board {
         boolean isOpen() {
             return false;
         }
+        @Override
+        boolean hasPiece() {
+            return false;
+        }
+    }
+
+    public boolean hasPiece(Point p){
+        return map.get(p).hasPiece();
     }
 }
