@@ -8,6 +8,7 @@ public class Game implements KeyListener {
 
 
     public static final Dimension SIZE = new Dimension(1920, 1080);
+    public static final int SEED = 8888;
 
     private Board board = new Board();
 
