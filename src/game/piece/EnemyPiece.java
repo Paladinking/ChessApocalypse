@@ -15,10 +15,10 @@ public class EnemyPiece extends Piece {
         setPosition(target);
     }
 
-    public void uppdate(Board board){
+    public void update(Board board){
         Point target = new Point(0, 0);
         if(board.hasPiece(target)) {
-            attack()
+
         }
     }
 

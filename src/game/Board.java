@@ -2,8 +2,10 @@ package game;
 
 import game.piece.EnemyPiece;
 import game.piece.Piece;
+import game.piece.PlayerPiece;
 
 import java.awt.*;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,7 +13,6 @@ import java.util.HashMap;
 
 public class Board {
     HashMap<Point, Tile> map;
-
     /**
      * The number of tiles in each direction in one chunk
      */

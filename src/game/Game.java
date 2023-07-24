@@ -1,11 +1,13 @@
 package game;
 
+import game.piece.PlayerPiece;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Game implements KeyListener {
 
@@ -14,6 +16,7 @@ public class Game implements KeyListener {
     public static final Random RANDOM = new Random(SEED);
 
     private Board board = new Board();
+    List<PlayerPiece> players = new ArrayList<>();
 
     private static final double PAN_SPEED = 300.0, FAST_PAN_SPEED = 600.0;
 
@@ -100,7 +103,9 @@ public class Game implements KeyListener {
 
 
     public void mousePressed(double x, double y) {
-        System.out.println("Pressed " + x + ", " + y);
+        int tileX = (int)Math.floor((x - cameraX) / Board.TILE_SIZE);
+        int tileY = (int)Math.floor((y - cameraY) / Board.TILE_SIZE);
+        System.out.println("Pressed " + tileX + ", " + tileY    );
     }
 
     public void mouseReleased(double x, double y) {
