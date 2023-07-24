@@ -13,12 +13,17 @@ public class EnemyPiece extends Piece {
     private static final int MAX_RANGE = 20;
 
     public EnemyPiece(int x, int y, int health) {
-        super(x, y, health, false);
+        super(x, y, health);
     }
 
     @Override
     public void move(Point target) {
         setPosition(target);
+    }
+
+    @Override
+    public boolean isPlayer() {
+        return false;
     }
 
     private record Node(Point pos, Node parent, int cost) {
