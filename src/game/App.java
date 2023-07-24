@@ -24,7 +24,8 @@ public class App {
                 }
             };
             panel.setBackground(Color.BLACK);
-
+            panel.setFocusable(true);
+            panel.addKeyListener(game);
             frame.setResizable(false);
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
