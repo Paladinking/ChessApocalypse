@@ -10,15 +10,16 @@ import java.util.HashSet;
 public abstract class Piece {
     private Point position;
     private MoveSet moveSet;
+    private int health;
     private boolean player;
-    public Piece (int x, int y) {
+    public Piece (int x, int y, int Health) {
         this.position = new Point(x, y);
     }
 
     /**
      * Internal class for movement
      */
-    private static abstract class MoveSet {
+    private static class MoveSet {
         private final ArrayList<Integer> xMoves;
         private final ArrayList<Integer> yMoves;
         public MoveSet(int xMove, int yMove, boolean shortMoves){
@@ -40,7 +41,7 @@ public abstract class Piece {
             return xMoves;
         }
 
-        public ArrayList<Integer>  getyMove() {
+        public ArrayList<Integer>  getyMoves() {
             return yMoves;
         }
     }
@@ -58,10 +59,18 @@ public abstract class Piece {
         return moveSet;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     public HashSet<Point> ValidMoves() {
         HashSet<Point> temp = new HashSet<>();
         for (Integer move1: moveSet.getxMoves()) {
-            for (Integer move2: moveSet.getxMoves()) {
+            for (Integer move2: moveSet.getyMoves()) {
                 temp.add(new Point((int)position.getX() + move1, (int)position.getY() + move2));
             }
         }
