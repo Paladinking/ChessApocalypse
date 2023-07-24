@@ -10,8 +10,8 @@ import java.util.HashSet;
 public abstract class Piece {
     private Point position;
     private MoveSet moveSet;
-    private int health;
-    private boolean player;
+    private int health, power;
+    private final boolean player;
     public Piece (int x, int y, int Health, boolean player) {
         this.position = new Point(x, y);
         this.player = player;
@@ -82,5 +82,82 @@ public abstract class Piece {
 
     public boolean isPlayer() {
         return player;
+    }
+
+    public void attack(Piece target){
+        target.setHealth(target.getHealth() - power);
+        Point temp = target.getPosition();
+        if(target.getHealth() > 0) {
+            int x = target.getPosition().x;
+            int y = target.getPosition().y;
+           switch (calcDirection(target.getPosition())) {
+               case 1 -> {
+                    target.move(new Point(x + 1, y + 1));
+               }
+               case 2 -> {
+                   target.move(new Point(x, y + 1));
+               }
+               case 3 -> {
+                   target.move(new Point(x - 1, y + 1));
+               }
+               case 4 -> {
+                   target.move(new Point(x + 1, y));
+               }
+               case 5 -> {
+                   target.move(new Point(x - 1, y - 1));
+               }
+               case 6 -> {
+                   target.move(new Point(x, y - 1));
+               }
+               case 7 -> {
+                   target.move(new Point(x + 1, y - 1));
+               }
+               case 8 -> {
+                   target.move(new Point(x + 1, y));
+               }
+           }
+        }
+        move(temp);
+    }
+
+    /**
+     * return a direction
+     * 123
+     * 8x4
+     * 765
+     */
+    private int calcDirection(Point target) {
+        int hDir, vDir;
+        hDir = getPosition().x - target.x;
+        vDir = getPosition().y - target.y;
+        if(Math.abs(hDir) == Math.abs(vDir)) { //Diagonal movement
+            if(hDir < 0 && vDir < 0){
+                return 1;
+            }
+            else if(hDir > 0 && vDir < 0){
+                return 3;
+            }
+            else if(hDir > 0 && vDir > 0){
+                return 5;
+            }
+            else if(hDir < 0 && vDir > 0){
+                return 7;
+            }
+        } else {
+            if (hDir > vDir) {
+                if (hDir < 0){
+                    return 8;
+                }else {
+                    return 4;
+                }
+            } else {
+                if (vDir < 0){
+                    return 2;
+                }else {
+                    return 6;
+                }
+            }
+        }
+        return 0;
     }
 }
