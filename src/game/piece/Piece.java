@@ -1,5 +1,7 @@
 package game.piece;
 
+import game.Board;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,46 +11,56 @@ import java.util.HashSet;
  */
 public abstract class Piece {
     private Point position;
-    private MoveSet moveSet;
     private int health, power;
-    private final boolean player;
-    public Piece (int x, int y, int health, boolean player) {
+    private MoveSet moveSet;
+
+    public Piece (int x, int y, int health) {
         this.position = new Point(x, y);
-        this.player = player;
     }
 
-    public Piece (int health, boolean player) {
+    public Piece (int health) {
         this.position = null;
-        this.player = player;
     }
 
     /**
      * Internal class for movement
      */
-    private static class MoveSet {
-        private final ArrayList<Integer> xMoves;
-        private final ArrayList<Integer> yMoves;
-        public MoveSet(int xMove, int yMove, boolean shortMoves){
-            xMoves = new ArrayList<>();
-            yMoves = new ArrayList<>();
-            xMoves.add(xMove);
-            yMoves.add(yMove);
-            if(shortMoves) {
-                for (int i = xMove; i > 0; i--) {
-                    xMoves.add(i);
+    public static class MoveSet {
+        private final ArrayList<Point> moves;
+        @SuppressWarnings("SuspiciousNameCombination")
+        public MoveSet(int xMove, int yMove, boolean shortMoves) {
+            HashSet<Point> moves = new HashSet<>();
+            if (shortMoves) {
+                for (int i = 1; i <= xMove; i++) {
+                    for (int j = 1; j <= yMove; j++) {
+                        moves.add(new Point(xMove, yMove));
+                        moves.add(new Point(-xMove, yMove));
+                        moves.add(new Point(yMove, xMove));
+                        moves.add(new Point(yMove, -xMove));
+
+                        moves.add(new Point(xMove, -yMove));
+                        moves.add(new Point(-xMove, -yMove));
+                        moves.add(new Point(-yMove, xMove));
+                        moves.add(new Point(-yMove, -xMove));
+                    }
                 }
-                for (int i = yMove; i > 0; i--) {
-                    yMoves.add(i);
-                }
+            } else {
+                moves.add(new Point(xMove, yMove));
+                moves.add(new Point(-xMove, yMove));
+                moves.add(new Point(yMove, xMove));
+                moves.add(new Point(yMove, -xMove));
+
+                moves.add(new Point(xMove, -yMove));
+                moves.add(new Point(-xMove, -yMove));
+                moves.add(new Point(-yMove, xMove));
+                moves.add(new Point(-yMove, -xMove));
             }
+
+            this.moves = new ArrayList<>(moves);
         }
 
-        public ArrayList<Integer> getxMoves() {
-            return xMoves;
-        }
-
-        public ArrayList<Integer>  getyMoves() {
-            return yMoves;
+        public ArrayList<Point> getMoves() {
+            return moves;
         }
     }
 
@@ -73,54 +85,29 @@ public abstract class Piece {
         this.health = health;
     }
 
-    public HashSet<Point> ValidMoves() {
-        HashSet<Point> temp = new HashSet<>();
-        for (Integer move1: moveSet.getxMoves()) {
-            for (Integer move2: moveSet.getyMoves()) {
-                temp.add(new Point((int)position.getX() + move1, (int)position.getY() + move2));
-            }
-        }
-        return temp;
-    }
-
     public abstract void move(Point target);
 
-    public boolean isPlayer() {
-        return player;
-    }
+    public abstract boolean isPlayer();
 
-    public void attack(Piece target){
+    public void attack(Piece target, Board board){
         target.setHealth(target.getHealth() - power);
         Point temp = target.getPosition();
         if(target.getHealth() > 0) {
             int x = target.getPosition().x;
             int y = target.getPosition().y;
-           switch (calcDirection(target.getPosition())) {
-               case 1 -> {
-                    target.move(new Point(x + 1, y + 1));
-               }
-               case 2 -> {
-                   target.move(new Point(x, y + 1));
-               }
-               case 3 -> {
-                   target.move(new Point(x - 1, y + 1));
-               }
-               case 4 -> {
-                   target.move(new Point(x + 1, y));
-               }
-               case 5 -> {
-                   target.move(new Point(x - 1, y - 1));
-               }
-               case 6 -> {
-                   target.move(new Point(x, y - 1));
-               }
-               case 7 -> {
-                   target.move(new Point(x + 1, y - 1));
-               }
-               case 8 -> {
-                   target.move(new Point(x + 1, y));
-               }
-           }
+            if(board.hasPiece(calcDirection(target.getPosition()))) {
+                Point p = target.getPosition();
+                label: for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (!board.hasPiece(new Point(target.getPosition().x-1 + i, target.getPosition().y-1 + j))) {
+                            target.move(new Point(target.getPosition().x-1 + i, target.getPosition().y-1 + j));
+                            break label;
+                        }
+                    }
+                }
+            }else {
+                target.move(calcDirection(target.getPosition()));
+            }
         }
         move(temp);
     }
@@ -131,38 +118,49 @@ public abstract class Piece {
      * 8x4
      * 765
      */
-    private int calcDirection(Point target) {
+    private Point calcDirection(Point target) {
         int hDir, vDir;
         hDir = getPosition().x - target.x;
         vDir = getPosition().y - target.y;
+        int dir = 0;
+        int x = target.x;
+        int y = target.y;
         if(Math.abs(hDir) == Math.abs(vDir)) { //Diagonal movement
             if(hDir < 0 && vDir < 0){
-                return 1;
+                dir = 1;
+                return new Point(x + 1, y + 1);
             }
             else if(hDir > 0 && vDir < 0){
-                return 3;
+                dir = 3;
+                return new Point(x - 1, y + 1);
             }
             else if(hDir > 0 && vDir > 0){
-                return 5;
+                dir = 5;
+                return new Point(x - 1, y - 1);
             }
             else if(hDir < 0 && vDir > 0){
-                return 7;
+                dir = 7;
+                return new Point(x + 1, y - 1);
             }
         } else {
             if (hDir > vDir) {
                 if (hDir < 0){
-                    return 8;
+                    dir = 8;
+                    return new Point(x + 1, y);
                 }else {
-                    return 4;
+                    dir = 4;
+                    return new Point(x + 1, y);
                 }
             } else {
                 if (vDir < 0){
-                    return 2;
+                    dir = 2;
+                    return new Point(x, y + 1);
                 }else {
-                    return 6;
+                    dir = 6;
+                    return new Point(x, y - 1);
                 }
             }
         }
-        return 0;
+        return null;
     }
 }

@@ -41,7 +41,6 @@ public class Board {
             }
         }
     }
-
     /**
      * The number of tiles in each direction in one chunk
      */
@@ -114,7 +113,17 @@ public class Board {
     public boolean hasPiece(Point p){
         return map.get(p).hasPiece();
     }
+    public boolean isOpen(Point p) {
+        Tile t = map.get(p);
+        if (t != null) {
+            return t.isOpen();
+        }
+        return true;
+    }
 
+    public static void main(String[] args) {
+        generateChunk();
+    }
     private enum Spawnable {
         ITEM (2), ENEMY (2), /*COIN (4),*/ CLOSED( 1);
 
