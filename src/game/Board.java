@@ -1,8 +1,9 @@
 package game;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 
 public class Board {
@@ -36,18 +37,49 @@ public class Board {
         }
     }
 
+    public static void main(String[] args) {
+        for (int i = 0; i < 50; i++) {
+            generateChunk();
+        }
+    }
+
+    private enum Spawnable {
+        ITEM (1), ENEMY (1), COIN (2);
+
+        private Spawnable(int weight) {
+            this.weight = weight;
+        }
+        public final int weight;
+
+        public static Spawnable getRandomWeighted() {
+            int weightSum = Arrays.stream(Spawnable.values()).map(s->s.weight).reduce(0, Integer::sum);
+            ArrayList<Spawnable> weightedList = new ArrayList<>(weightSum);
+            for(Spawnable s : Spawnable.values())
+            {
+                for(int i = 0; i < s.weight; i++)
+                {
+                    weightedList.add(s);
+                }
+            }
+            return weightedList.get(Game.RANDOM.nextInt(weightSum));
+        }
+    }
+
     /**
      * Generates a chunk of tiles with size Board.CHUNK_SIZE squared.
      * Items in the array are indexed left-to-right then top-down.
      *
      * @return an array of newly generated tiles
      */
-    private static Tile[] generateChunk()
-    {
+    private static Tile[] generateChunk() {
         final Tile[] chunk = new Tile[CHUNK_SIZE*CHUNK_SIZE];
-        Random rnd = new Random(Game.SEED);
         int baseGoodness = CHUNK_SIZE*CHUNK_SIZE/2;
-        int goodness = baseGoodness + rnd.nextInt()
+        int goodness = (int) ((baseGoodness / 2) * Game.RANDOM.nextGaussian());
+        int sum = 0;
+
+
+        Spawnable spawnable = Spawnable.getRandomWeighted();
+        System.out.println(spawnable);
 
         return chunk;
     }
