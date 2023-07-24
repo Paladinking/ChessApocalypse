@@ -1,51 +1,72 @@
 package game.piece;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 /**
  * Abstract chess piece
  */
-public class Piece {
-    private int x, y;
+public abstract class Piece {
+    private Point position;
+    private MoveSet moveSet;
     private boolean player;
     public Piece (int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.position = new Point(x, y);
     }
 
     /**
      * Internal class for movement
      */
     private static abstract class MoveSet {
-        private final int xMove;
-        private final int yMove;
-        public MoveSet(int xMove, int yMove){
-            this.xMove = xMove;
-            this.yMove = yMove;
+        private final ArrayList<Integer> xMoves;
+        private final ArrayList<Integer> yMoves;
+        public MoveSet(int xMove, int yMove, boolean shortMoves){
+            xMoves = new ArrayList<>();
+            yMoves = new ArrayList<>();
+            xMoves.add(xMove);
+            yMoves.add(yMove);
+            if(shortMoves) {
+                for (int i = xMove; i > 0; i--) {
+                    xMoves.add(i);
+                }
+                for (int i = yMove; i > 0; i--) {
+                    yMoves.add(i);
+                }
+            }
         }
 
-        public int getxMove() {
-            return xMove;
+        public ArrayList<Integer> getxMoves() {
+            return xMoves;
         }
 
-        public int getyMove() {
-            return yMove;
+        public ArrayList<Integer>  getyMove() {
+            return yMoves;
         }
     }
 
 
-
-    public int getX() {
-        return x;
+    public Point getPosition() {
+        return position;
     }
 
-    public int getY() {
-        return y;
+    public void setPosition(Point position) {
+        this.position = position;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public MoveSet getMoveSet() {
+        return moveSet;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public HashSet<Point> ValidMoves() {
+        HashSet<Point> temp = new HashSet<>();
+        for (Integer move1: moveSet.getxMoves()) {
+            for (Integer move2: moveSet.getxMoves()) {
+                temp.add(new Point((int)position.getX() + move1, (int)position.getY() + move2));
+            }
+        }
+        return temp;
     }
+
+    public abstract void move(Point target);
 }
