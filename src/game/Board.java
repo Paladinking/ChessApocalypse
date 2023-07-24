@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 
 public class Board {
-    HashMap<Point, Tile> map;
+    HashMap<Point, Tile> map = new HashMap<>();
     /**
      * The number of tiles in each direction in one chunk
      */
@@ -71,6 +71,14 @@ public class Board {
 
     public boolean hasPiece(Point p){
         return map.get(p).hasPiece();
+    }
+
+    public boolean isOpen(Point p) {
+        Tile t = map.get(p);
+        if (t != null) {
+            return t.isOpen();
+        }
+        return true;
     }
 
     public static void main(String[] args) {

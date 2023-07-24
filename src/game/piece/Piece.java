@@ -9,7 +9,7 @@ import java.util.HashSet;
  */
 public abstract class Piece {
     private Point position;
-    private MoveSet moveSet;
+    private MoveSet moveSet = new MoveSet(1, 0, false);
     private int health;
     private boolean player;
     public Piece (int x, int y, int Health, boolean player) {
@@ -20,30 +20,41 @@ public abstract class Piece {
     /**
      * Internal class for movement
      */
-    private static class MoveSet {
-        private final ArrayList<Integer> xMoves;
-        private final ArrayList<Integer> yMoves;
+    public static class MoveSet {
+        private final ArrayList<Point> moves;
         public MoveSet(int xMove, int yMove, boolean shortMoves){
-            xMoves = new ArrayList<>();
-            yMoves = new ArrayList<>();
-            xMoves.add(xMove);
-            yMoves.add(yMove);
-            if(shortMoves) {
-                for (int i = xMove; i > 0; i--) {
-                    xMoves.add(i);
+            HashSet<Point> moves = new HashSet<>();
+            if (shortMoves) {
+                for (int i = 1; i <= xMove; i++) {
+                    for (int j = 1; j <= yMove; j++) {
+                        moves.add(new Point(xMove, yMove));
+                        moves.add(new Point(-xMove, yMove));
+                        moves.add(new Point(yMove, xMove));
+                        moves.add(new Point(yMove, -xMove));
+
+                        moves.add(new Point(xMove, -yMove));
+                        moves.add(new Point(-xMove, -yMove));
+                        moves.add(new Point(-yMove, xMove));
+                        moves.add(new Point(-yMove, -xMove));
+                    }
                 }
-                for (int i = yMove; i > 0; i--) {
-                    yMoves.add(i);
-                }
+            } else {
+                moves.add(new Point(xMove, yMove));
+                moves.add(new Point(-xMove, yMove));
+                moves.add(new Point(yMove, xMove));
+                moves.add(new Point(yMove, -xMove));
+
+                moves.add(new Point(xMove, -yMove));
+                moves.add(new Point(-xMove, -yMove));
+                moves.add(new Point(-yMove, xMove));
+                moves.add(new Point(-yMove, -xMove));
             }
+
+            this.moves = new ArrayList<>(moves);
         }
 
-        public ArrayList<Integer> getxMoves() {
-            return xMoves;
-        }
-
-        public ArrayList<Integer>  getyMoves() {
-            return yMoves;
+        public ArrayList<Point> getMoves() {
+            return moves;
         }
     }
 
@@ -66,16 +77,6 @@ public abstract class Piece {
 
     public void setHealth(int health) {
         this.health = health;
-    }
-
-    public HashSet<Point> ValidMoves() {
-        HashSet<Point> temp = new HashSet<>();
-        for (Integer move1: moveSet.getxMoves()) {
-            for (Integer move2: moveSet.getyMoves()) {
-                temp.add(new Point((int)position.getX() + move1, (int)position.getY() + move2));
-            }
-        }
-        return temp;
     }
 
     public abstract void move(Point target);
