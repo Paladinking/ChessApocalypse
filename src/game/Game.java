@@ -3,9 +3,10 @@ package game;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Game implements KeyListener {
-
 
     public static final Dimension SIZE = new Dimension(1920, 1080);
 
@@ -37,7 +38,7 @@ public class Game implements KeyListener {
      * @param delta time since last call to tick
      */
     void tick(long delta) {
-        double secs = delta / 1000000000.0;
+        double secs = delta / 1000_000_000.0;
         if (passTurn) {
             turn();
             passTurn = false;
@@ -55,7 +56,6 @@ public class Game implements KeyListener {
         if (right) {
             cameraX -= secs * pan_speed;
         }
-
     }
 
     /**
@@ -64,7 +64,7 @@ public class Game implements KeyListener {
      */
     void render(Graphics2D g2d) {
         g2d.translate(cameraX, cameraY);
-        board.render(g2d);
+        board.render(g2d, (int) cameraX, (int) cameraY);
     }
 
 
@@ -93,5 +93,14 @@ public class Game implements KeyListener {
             case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> right = false;
             case KeyEvent.VK_SHIFT -> fastPan = false;
         }
+    }
+
+
+    public void mousePressed(double x, double y) {
+        System.out.println("Pressed " + x + ", " + y);
+    }
+
+    public void mouseReleased(double x, double y) {
+
     }
 }
