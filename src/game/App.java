@@ -2,6 +2,9 @@ package game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class App {
 
@@ -26,6 +29,23 @@ public class App {
             panel.setBackground(Color.BLACK);
             panel.setFocusable(true);
             panel.addKeyListener(game);
+            panel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    Rectangle r = panel.getBounds();
+                    final double scaling = Math.max(Game.SIZE.width / (double)r.width,
+                            Game.SIZE.height / (double) r.height);
+                    game.mousePressed(e.getX() * scaling, e.getY() * scaling);
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    Rectangle r = panel.getBounds();
+                    final double scaling = Math.max(Game.SIZE.width / (double)r.width,
+                            Game.SIZE.height / (double) r.height);
+                    game.mouseReleased(e.getX() * scaling, e.getY() * scaling);
+                }
+            });
             frame.setResizable(false);
             frame.setExtendedState(Frame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
