@@ -1,14 +1,22 @@
 package game;
 
+import game.piece.PlayerPiece;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Game implements KeyListener {
 
     public static final Dimension SIZE = new Dimension(1920, 1080);
+    public static final int SEED = 8888;
+    public static final Random RANDOM = new Random(SEED);
 
     private Board board = new Board();
+    List<PlayerPiece> players = new ArrayList<>();
 
     private static final double PAN_SPEED = 300.0, FAST_PAN_SPEED = 600.0;
 
