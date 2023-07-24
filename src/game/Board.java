@@ -1,5 +1,6 @@
 package game;
 
+import game.piece.EnemyPiece;
 import game.piece.Piece;
 
 import java.awt.*;
@@ -31,8 +32,20 @@ public class Board {
 
     public abstract static class Tile {
         private Piece piece;
+
+        public Item getItem() {
+            return item;
+        }
+
+        public void setItem(Item item) {
+            this.item = item;
+        }
+
+        private Item item;
         abstract boolean isOpen();
         abstract boolean hasPiece();
+
+
 
         public Piece getPiece() {
             return piece;
@@ -73,13 +86,11 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 50; i++) {
-            generateChunk();
-        }
+        generateChunk();
     }
 
     private enum Spawnable {
-        ITEM (1), ENEMY (1), COIN (2);
+        ITEM (2), ENEMY (2), /*COIN (4),*/ CLOSED( 1);
 
         private Spawnable(int weight) {
             this.weight = weight;
@@ -102,20 +113,48 @@ public class Board {
 
     /**
      * Generates a chunk of tiles with size Board.CHUNK_SIZE squared.
-     * Items in the array are indexed left-to-right then top-down.
      *
      * @return an array of newly generated tiles
      */
-    private static Tile[] generateChunk() {
-        final Tile[] chunk = new Tile[CHUNK_SIZE*CHUNK_SIZE];
-        int baseGoodness = CHUNK_SIZE*CHUNK_SIZE/2;
-        int goodness = (int) ((baseGoodness / 2) * Game.RANDOM.nextGaussian());
-        int sum = 0;
+    private static Tile[][] generateChunk() {
+        final Tile[][] chunk = new Tile[CHUNK_SIZE][CHUNK_SIZE];
+        /*int baseGoodness = CHUNK_SIZE*CHUNK_SIZE/2;
+        int goodness = (int) ((baseGoodness / 2) * Game.RANDOM.nextGaussian());*/
+        int noToSpawn = Game.RANDOM.nextInt(4,8)
+        Tile[] filledTiles = new Tile[noToSpawn];
+        for (int i = 0; i < noToSpawn; i++) {
+            Spawnable spawnable = Spawnable.getRandomWeighted();
+            Tile t = null;
+            switch (spawnable)
+            {
+                case ITEM -> {
+                    t = new OpenTile();
+                    t.setItem(Item.generateItem());
+                }
+                case ENEMY -> {
+                    t = new OpenTile();
+                    t.setPiece(EnemyPiece.generateEnemy());
+                }
+                /*case COIN -> {
 
-
-        Spawnable spawnable = Spawnable.getRandomWeighted();
-        System.out.println(spawnable);
-
+                }*/
+                case CLOSED -> {
+                    t = new BlockedTile();
+                }
+            }
+            filledTiles[i] = t;
+        }
+        for(Tile t : filledTiles)
+        {
+            int x = Game.RANDOM.nextInt(CHUNK_SIZE);
+            int y = Game.RANDOM.nextInt(CHUNK_SIZE);
+            while(chunk[x][y] == null)
+            {
+                chunk[x][y] = t;
+                x = Game.RANDOM.nextInt(CHUNK_SIZE);
+                y = Game.RANDOM.nextInt(CHUNK_SIZE);
+            }
+        }
         return chunk;
     }
 }
