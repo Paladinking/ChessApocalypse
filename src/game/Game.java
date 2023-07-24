@@ -3,8 +3,6 @@ package game;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Game implements KeyListener {
 
@@ -97,7 +95,9 @@ public class Game implements KeyListener {
 
 
     public void mousePressed(double x, double y) {
-        System.out.println("Pressed " + x + ", " + y);
+        int tileX = (int)Math.floor((x - cameraX) / Board.TILE_SIZE);
+        int tileY = (int)Math.floor((y - cameraY) / Board.TILE_SIZE);
+        System.out.println("Pressed " + tileX + ", " + tileY    );
     }
 
     public void mouseReleased(double x, double y) {

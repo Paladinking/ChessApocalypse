@@ -1,8 +1,11 @@
 package game;
 
 import game.piece.Piece;
+import game.piece.PlayerPiece;
 
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -10,6 +13,8 @@ public class Board {
     public static final int TILE_SIZE = 80;
 
     HashMap<Point, Tile> map;
+
+    List<PlayerPiece> players = new ArrayList<>();
 
     public void render(Graphics2D g2d, int cameraX, int cameraY) {
         g2d.setColor(Color.WHITE);
