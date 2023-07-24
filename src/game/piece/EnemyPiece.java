@@ -12,7 +12,7 @@ public class EnemyPiece extends Piece {
 
     @Override
     public void move(Point target) {
-        setPosition(target);
+        getPosition().setLocation(target);
     }
 
     public void update(Board board){
