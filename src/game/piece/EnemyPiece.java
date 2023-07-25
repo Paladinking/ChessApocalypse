@@ -17,7 +17,7 @@ public class EnemyPiece extends Piece {
     }
 
     public EnemyPiece(int health) {
-        super(health,false);
+        super(health);
     }
     public static Piece generateEnemy() {
         return new EnemyPiece(2 );
