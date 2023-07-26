@@ -111,8 +111,12 @@ public class Game implements KeyListener {
     public void mousePressed(double x, double y) {
         int tileX = (int)Math.floor((x - cameraX) / Board.TILE_SIZE);
         int tileY = (int)Math.floor((y - cameraY) / Board.TILE_SIZE);
-        ui.setSelected(board.getTile(new Point(tileX, tileY)));
+        if(ui.getSelected().hasPiece()) {
+            if (ui.getSelected().getPiece().isPlayer()) {
 
+            }
+        }
+        ui.setSelected(board.getTile(new Point(tileX, tileY)));
     }
 
     public void mouseReleased(double x, double y) {

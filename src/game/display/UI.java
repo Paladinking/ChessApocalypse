@@ -24,4 +24,8 @@ public class UI {
     public void setSelected(Board.Tile selected) {
         this.selected = selected;
     }
+
+    public Board.Tile getSelected() {
+        return selected;
+    }
 }
