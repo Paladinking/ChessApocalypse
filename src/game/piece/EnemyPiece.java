@@ -10,12 +10,19 @@ public class EnemyPiece extends Piece {
 
     private static final int MAX_RANGE = 20;
 
+    private static Image getImage(PieceType type) {
+        return switch (type) {
+            case KNIGHT -> images[10];
+            case PAWN -> images[11];
+        };
+    }
+
     public EnemyPiece(int x, int y, int health, PieceType pieceType) {
-        super(x, y, health, pieceType.moveSet);
+        super(x, y, health, pieceType.moveSet, getImage(pieceType));
     }
 
     public EnemyPiece(int health, PieceType pieceType) {
-        super(health, pieceType.moveSet);
+        super(health, pieceType.moveSet, getImage(pieceType));
     }
     public static Piece generateEnemy() {
         return new EnemyPiece(2, PieceType.getRandomWeighted());
