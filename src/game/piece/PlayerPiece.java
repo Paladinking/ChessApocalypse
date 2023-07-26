@@ -1,11 +1,24 @@
 package game.piece;
 
+import game.App;
+
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class PlayerPiece extends Piece {
     private boolean moved;
+
+    private static Image getImage(PieceType type) {
+        return switch (type) {
+            case KNIGHT -> images[4];
+            case PAWN -> images[5];
+        };
+    }
+
     public PlayerPiece(int x, int y, int health, PieceType type) {
-        super(x, y, health, type.moveSet);
+        super(x, y, health, type.moveSet, getImage(type));
         moved = false;
 
     }

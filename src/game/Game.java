@@ -72,6 +72,9 @@ public class Game implements KeyListener {
     void render(Graphics2D g2d) {
         g2d.translate(cameraX, cameraY);
         board.render(g2d, (int) cameraX, (int) cameraY);
+        for (PlayerPiece piece : players) {
+            piece.render(g2d);
+        }
     }
 
 

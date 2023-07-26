@@ -1,16 +1,39 @@
 package game.piece;
 
 import game.Board;
+import game.Game;
 import game.Weighted;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashSet;
 
 /**
  * Abstract chess piece
  */
 public abstract class Piece {
+
+    protected final static Image[] images;
+
+    static {
+        Image[] loaded_images = null;
+        try {
+            BufferedImage all = ImageIO.read(ClassLoader.getSystemResource("pieces.png"));
+            if (all == null) throw new IOException("Could not load image 'pieces.png'");
+            loaded_images = new Image[12];
+            for (int x = 0; x < 6; x++) {
+                for (int y = 0; y < 2; y++) {
+                    loaded_images[x + 6 * y] = all.getSubimage(x * 100, y * 100, 100, 100);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Could not load images: " + e);
+            System.exit(-1);
+        }
+        images = loaded_images;
+    }
 
     protected enum PieceType implements Weighted {
         KNIGHT(new MoveSet().withSymmetricMoves(2, 1)),
@@ -36,16 +59,25 @@ public abstract class Piece {
 
     protected Point position;
     protected int health, power = 10;
-    protected MoveSet moveSet;
+    protected final MoveSet moveSet;
+    protected final Image image;
 
-    public Piece (int x, int y, int health, MoveSet moveSet) {
+    public Piece (int x, int y, int health, MoveSet moveSet, Image image) {
         this.position = new Point(x, y);
         this.health = health;
         this.moveSet = moveSet;
+        this.image = image;
     }
 
-    public Piece (int health, MoveSet moveSet) {
+    public Piece (int health, MoveSet moveSet, Image image) {
         this.position = null;
+        this.moveSet = moveSet;
+        this.image = image;
+    }
+
+    public void render(Graphics2D g2d) {
+        g2d.drawImage(image, position.x * Board.TILE_SIZE, position.y * Board.TILE_SIZE,
+                Board.TILE_SIZE, Board.TILE_SIZE, null);
     }
 
     /**
@@ -53,7 +85,6 @@ public abstract class Piece {
      */
     public static class MoveSet {
         private final HashSet<Point> moves;
-        @SuppressWarnings("SuspiciousNameCombination")
 
         public MoveSet() {
             this.moves = new HashSet<>();
