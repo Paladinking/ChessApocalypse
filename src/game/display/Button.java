@@ -19,6 +19,5 @@ public class Button {
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawRect(x + 3, y + 3, width - 6, height -6);
-        g2d.drawRect(x + 3, y + 3, width/2 - 6, height -6);
     }
 }

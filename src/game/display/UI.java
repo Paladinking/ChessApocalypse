@@ -11,7 +11,7 @@ public class UI {
     public UI() {
         buttons = new ArrayList<>();
         Button peiceButton = new PeiceButton((int)(0.5* Board.TILE_SIZE), (int)(0.5 * Board.TILE_SIZE),
-                2 * Board.TILE_SIZE, Board.TILE_SIZE);
+                Board.TILE_SIZE, Board.TILE_SIZE);
         buttons.add(peiceButton);
     }
 
