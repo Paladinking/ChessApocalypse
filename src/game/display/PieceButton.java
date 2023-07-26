@@ -4,8 +4,8 @@ import game.Board;
 
 import java.awt.*;
 
-public class PeiceButton extends Button{
-    public PeiceButton(int x, int y, int width, int height) {
+public class PieceButton extends Button{
+    public PieceButton(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 

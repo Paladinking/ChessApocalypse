@@ -10,7 +10,7 @@ public class UI {
     private Board.Tile selected;
     public UI() {
         buttons = new ArrayList<>();
-        Button peiceButton = new PeiceButton((int)(0.5* Board.TILE_SIZE), (int)(0.5 * Board.TILE_SIZE),
+        Button peiceButton = new PieceButton((int)(0.5* Board.TILE_SIZE), (int)(0.5 * Board.TILE_SIZE),
                 Board.TILE_SIZE, Board.TILE_SIZE);
         buttons.add(peiceButton);
     }
