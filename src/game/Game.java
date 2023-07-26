@@ -1,6 +1,5 @@
 package game;
 
-import game.piece.EnemyPiece;
 import game.piece.PlayerPiece;
 
 import java.awt.*;
@@ -12,7 +11,7 @@ import java.util.Random;
 
 public class Game implements KeyListener {
 
-    public static final Dimension SIZE = new Dimension(1920, 1080);
+    public static final Rectangle VIEWPORT = new Rectangle(0,0,1920, 1080);
     public static final int SEED = 8888;
     public static final Random RANDOM = new Random(SEED);
 
@@ -106,7 +105,6 @@ public class Game implements KeyListener {
     public void mousePressed(double x, double y) {
         int tileX = (int)Math.floor((x - cameraX) / Board.TILE_SIZE);
         int tileY = (int)Math.floor((y - cameraY) / Board.TILE_SIZE);
-
     }
 
     public void mouseReleased(double x, double y) {
