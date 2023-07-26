@@ -1,5 +1,7 @@
 package game.display;
 
+import game.Board;
+
 import java.awt.*;
 
 public class Button {
@@ -11,8 +13,12 @@ public class Button {
         this.height = height;
     }
 
-    public void draw(Graphics2D g2d) {
-        g2d.setColor(Color.CYAN);
+    public void render(Graphics2D g2d, Board.Tile selected) {
+        g2d.setColor(Color.LIGHT_GRAY);
         g2d.fillRect(x, y, width, height);
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawRect(x + 3, y + 3, width - 6, height -6);
+        g2d.drawRect(x + 3, y + 3, width/2 - 6, height -6);
     }
 }

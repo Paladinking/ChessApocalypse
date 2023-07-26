@@ -67,7 +67,7 @@ public class Board {
         int y = -Math.floorDiv(cameraY, TILE_SIZE);
         for (int i = x - 1; i <= x + Game.SIZE.width / TILE_SIZE; i++) {
             for (int j = y - 2; j <= y + Game.SIZE.height / TILE_SIZE; j++) {
-                g2d.setColor((i + j) % 2 == 0 ? Color.BLACK : Color.WHITE);
+                g2d.setColor((i + j) % 2 == 0 ? Color.BLACK : /**Color.WHITE)*/new Color(255, 210, 153, 255));
                 g2d.fillRect(i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
         }
@@ -88,7 +88,7 @@ public class Board {
 
         abstract boolean isOpen();
 
-        abstract boolean hasPiece();
+        public abstract boolean hasPiece();
 
         abstract boolean hasItem();
 
@@ -109,7 +109,7 @@ public class Board {
 
         //Temp
         @Override
-        boolean hasPiece() {
+       public boolean hasPiece() {
             return piece != null;
         }
 
@@ -127,7 +127,7 @@ public class Board {
         }
 
         @Override
-        boolean hasPiece() {
+        public boolean hasPiece() {
             return false;
         }
 
@@ -139,6 +139,10 @@ public class Board {
 
     public boolean hasPiece(Point p) {
         return map.get(p).hasPiece();
+    }
+
+    public Tile getTile(Point p) {
+        return map.get(p);
     }
 
     public boolean isOpen(Point p) {
