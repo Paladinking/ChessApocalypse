@@ -1,5 +1,6 @@
 package game;
 
+import game.display.UI;
 import game.piece.EnemyPiece;
 import game.piece.PlayerPiece;
 
@@ -17,6 +18,8 @@ public class Game implements KeyListener {
     public static final Random RANDOM = new Random(SEED);
 
     private final Board board = new Board();
+
+    private final UI ui = new UI();
     List<PlayerPiece> players = new ArrayList<>();
 
     private static final double PAN_SPEED = 300.0, FAST_PAN_SPEED = 600.0;
@@ -72,6 +75,7 @@ public class Game implements KeyListener {
     void render(Graphics2D g2d) {
         g2d.translate(cameraX, cameraY);
         board.render(g2d, (int) cameraX, (int) cameraY);
+        ui.render(g2d);
     }
 
 
