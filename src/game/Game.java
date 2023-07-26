@@ -1,7 +1,7 @@
 package game;
 
 import game.display.UI;
-import game.piece.EnemyPiece;
+import game.piece.Piece;
 import game.piece.PlayerPiece;
 
 import java.awt.*;
@@ -33,7 +33,11 @@ public class Game implements KeyListener {
      * Initializes the game.
      */
     void init() {
-
+        Point pos = new Point(5, 5);
+        PlayerPiece piece = new PlayerPiece(pos.x, pos.y, 10, Piece.PieceType.PAWN);
+        players.add(piece);
+        board.generateInitialMap();
+        board.getTile(pos).setPiece(piece);
     }
 
     /**

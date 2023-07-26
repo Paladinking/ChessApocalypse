@@ -4,6 +4,9 @@ import game.piece.EnemyPiece;
 import game.piece.Piece;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 
@@ -12,10 +15,9 @@ public class Board {
 
     public Board() {
         map = new HashMap<>();
-        generateInitialMap();
     }
 
-    private void generateInitialMap() {
+    public void generateInitialMap() {
         //4
         int chunksHorizontal = (int) ((Game.SIZE.width / (double) TILE_SIZE) / CHUNK_SIZE) + 1;
         //2

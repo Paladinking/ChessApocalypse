@@ -54,7 +54,6 @@ public class App {
             frame.add(panel);
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
             final long[] timestamp = {System.nanoTime()};
             Timer timer = new Timer(15, (e) -> {
                 long cur = System.nanoTime();
@@ -62,7 +61,9 @@ public class App {
                 timestamp[0] = cur;
                 panel.repaint();
             });
+            game.init();
             timer.start();
+            frame.setVisible(true);
         });
     }
 }
