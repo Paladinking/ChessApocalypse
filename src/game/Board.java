@@ -4,9 +4,6 @@ import game.piece.EnemyPiece;
 import game.piece.Piece;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 
 
@@ -41,7 +38,7 @@ public class Board {
      * @param startY y coordinate of the top of the chunk
      */
     private void loadChunk(int startX, int startY) {
-        Tile[][] chunk = generateChunk();
+        Tile[][] chunk = Tile.generateChunk();
 
         for (int x = 0; x < chunk.length; x++) {
             for (int y = 0; y < chunk[x].length; y++) {
@@ -51,7 +48,7 @@ public class Board {
                     chunk[x][y].getPiece().setPosition(position);
                 }
                 else if (chunk[x][y].hasItem()) {
-                    chunk[x][y].item.setPosition(position);
+                    chunk[x][y].getItem().setPosition(position);
                 }
             }
         }
@@ -60,7 +57,7 @@ public class Board {
     /**
      * The number of tiles in each direction in one chunk
      */
-    private static final int CHUNK_SIZE = 8;
+    public static final int CHUNK_SIZE = 8;
     public static final int TILE_SIZE = 80;
 
     public void render(Graphics2D g2d, int cameraX, int cameraY, Tile selected) {
@@ -85,70 +82,6 @@ public class Board {
         }
     }
 
-    public abstract static class Tile {
-        protected Piece piece;
-
-        public Item getItem() {
-            return item;
-        }
-
-        public void setItem(Item item) {
-            this.item = item;
-        }
-
-        protected Item item;
-
-        abstract boolean isOpen();
-
-        public abstract boolean hasPiece();
-
-        abstract boolean hasItem();
-
-        public Piece getPiece() {
-            return piece;
-        }
-
-        public void setPiece(Piece piece) {
-            this.piece = piece;
-        }
-    }
-
-    public static class OpenTile extends Tile {
-        @Override
-        boolean isOpen() {
-            return hasPiece() || hasItem();
-        }
-
-        //Temp
-        @Override
-       public boolean hasPiece() {
-            return piece != null;
-        }
-
-        @Override
-        boolean hasItem() {
-            return item != null;
-        }
-
-    }
-
-    public static class BlockedTile extends Tile {
-        @Override
-        boolean isOpen() {
-            return false;
-        }
-
-        @Override
-        public boolean hasPiece() {
-            return false;
-        }
-
-        @Override
-        boolean hasItem() {
-            return false;
-        }
-    }
-
     public boolean hasPiece(Point p) {
         return map.get(p).hasPiece();
     }
@@ -166,69 +99,4 @@ public class Board {
     }
 
 
-    private enum Spawnable implements Weighted {
-        ITEM, ENEMY, /*COIN,*/ CLOSED;
-
-        public int getWeight() {
-            return switch (this) {
-                case ITEM, ENEMY -> 2;
-                case CLOSED -> 1;
-            };
-        }
-
-
-        public static Spawnable getRandomWeighted() {
-            return (Spawnable) Weighted.getRandomWeighted(values());
-        }
-    }
-
-    /**
-     * Generates a chunk of tiles with size Board.CHUNK_SIZE squared.
-     *
-     * @return an array of newly generated tiles
-     */
-    private static Tile[][] generateChunk() {
-        final Tile[][] chunk = new Tile[CHUNK_SIZE][CHUNK_SIZE];
-        int noToSpawn = Game.RANDOM.nextInt(CHUNK_SIZE, CHUNK_SIZE * CHUNK_SIZE / 2);
-        Tile[] filledTiles = new Tile[noToSpawn];
-        for (int i = 0; i < noToSpawn; i++) {
-            Spawnable spawnable = Spawnable.getRandomWeighted();
-            Tile t = null;
-            switch (spawnable) {
-                case ITEM -> {
-                    t = new OpenTile();
-                    t.setItem(Item.generateItem());
-                }
-                case ENEMY -> {
-                    t = new OpenTile();
-                    t.setPiece(EnemyPiece.generateEnemy());
-                }
-                /*case COIN -> {
-
-                }*/
-                case CLOSED -> {
-                    t = new BlockedTile();
-                }
-            }
-            filledTiles[i] = t;
-        }
-        for (Tile t : filledTiles) {
-            int x = Game.RANDOM.nextInt(CHUNK_SIZE);
-            int y = Game.RANDOM.nextInt(CHUNK_SIZE);
-            while (chunk[x][y] != null) {
-                x = Game.RANDOM.nextInt(CHUNK_SIZE);
-                y = Game.RANDOM.nextInt(CHUNK_SIZE);
-            }
-            chunk[x][y] = t;
-        }
-
-        for (int x = 0; x < chunk.length; x++) {
-            for (int y = 0; y < chunk[x].length; y++) {
-                if (chunk[x][y] == null) {
-                    chunk[x][y] = new OpenTile();
-                }
-            }
-        }
-        return chunk;
-    }
 }

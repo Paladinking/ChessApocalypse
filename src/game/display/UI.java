@@ -1,13 +1,14 @@
 package game.display;
 
 import game.Board;
+import game.Tile;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class UI {
     private final ArrayList<Button> buttons;
-    private Board.Tile selected;
+    private Tile selected;
     public UI() {
         buttons = new ArrayList<>();
         Button pieceButton = new PieceButton((int)(0.5* Board.TILE_SIZE), (int)(0.5 * Board.TILE_SIZE),
@@ -21,11 +22,11 @@ public class UI {
         }
     }
 
-    public void setSelected(Board.Tile selected) {
+    public void setSelected(Tile selected) {
         this.selected = selected;
     }
 
-    public Board.Tile getSelected() {
+    public Tile getSelected() {
         return selected;
     }
 }

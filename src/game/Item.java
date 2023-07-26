@@ -20,7 +20,9 @@ public class Item {
         @Override
         public int getWeight() {
             return switch (this) {
-                case HEAL, DAMAGE, COIN -> 1;
+                case HEAL -> 1;
+                case DAMAGE -> 2;
+                case COIN -> 3;
             };
         }
         private static ItemType getRandomWeighted() {

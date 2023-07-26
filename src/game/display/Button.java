@@ -1,6 +1,7 @@
 package game.display;
 
 import game.Board;
+import game.Tile;
 
 import java.awt.*;
 
@@ -13,7 +14,7 @@ public class Button {
         this.height = height;
     }
 
-    public void render(Graphics2D g2d, Board.Tile selected) {
+    public void render(Graphics2D g2d, Tile selected) {
         g2d.setColor(Color.LIGHT_GRAY);
         g2d.fillRect(x, y, width, height);
         g2d.setColor(Color.BLACK);
