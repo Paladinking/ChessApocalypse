@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class Game implements KeyListener {
 
-    public static final Dimension SIZE = new Dimension(1920, 1080);
+    public static final Rectangle VIEWPORT = new Rectangle(0,0,1920, 1080);
     public static final int SEED = 8888;
     public static final Random RANDOM = new Random(SEED);
 
@@ -78,6 +78,7 @@ public class Game implements KeyListener {
      */
     void render(Graphics2D g2d) {
         g2d.translate(cameraX, cameraY);
+        g2d.setColor(Color.RED);
         board.render(g2d, (int) cameraX, (int) cameraY);
         for (PlayerPiece piece : players) {
             piece.render(g2d);

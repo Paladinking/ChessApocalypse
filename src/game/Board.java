@@ -19,9 +19,9 @@ public class Board {
 
     public void generateInitialMap() {
         //4
-        int chunksHorizontal = (int) ((Game.SIZE.width / (double) TILE_SIZE) / CHUNK_SIZE) + 1;
+        int chunksHorizontal = (int) ((Game.VIEWPORT.width / (double) TILE_SIZE) / CHUNK_SIZE) + 1;
         //2
-        int chunksVertical = (int) ((Game.SIZE.height / (double) TILE_SIZE) / CHUNK_SIZE) + 1;
+        int chunksVertical = (int) ((Game.VIEWPORT.height / (double) TILE_SIZE) / CHUNK_SIZE) + 1;
 
         int x = -(chunksHorizontal / 2) * CHUNK_SIZE;
         int y = -(chunksVertical / 2) * CHUNK_SIZE;
@@ -67,8 +67,8 @@ public class Board {
         g2d.setColor(Color.WHITE);
         int x = -Math.floorDiv(cameraX, TILE_SIZE);
         int y = -Math.floorDiv(cameraY, TILE_SIZE);
-        for (int i = x - 1; i <= x + Game.SIZE.width / TILE_SIZE; i++) {
-            for (int j = y - 2; j <= y + Game.SIZE.height / TILE_SIZE; j++) {
+        for (int i = x - 1; i <= x + Game.VIEWPORT.width / TILE_SIZE; i++) {
+            for (int j = y - 2; j <= y + Game.VIEWPORT.height / TILE_SIZE; j++) {
                 g2d.setColor((i + j) % 2 == 0 ? Color.BLACK : /**Color.WHITE)*/new Color(255, 210, 153, 255));
                 g2d.fillRect(i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
