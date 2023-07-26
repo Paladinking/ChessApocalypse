@@ -2,17 +2,45 @@ package game;
 
 import game.piece.EnemyPiece;
 import game.piece.Piece;
-import game.piece.PlayerPiece;
 
 import java.awt.*;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 
 public class Board {
-    HashMap<Point, Tile> map = new HashMap<>();
+    private final HashMap<Point, Tile> map;
+
+    public Board() {
+        map = new HashMap<>();
+        generateInitialMap();
+    }
+    private void generateInitialMap() {
+        //4
+        int chunksHorizontal = (int) ((Game.SIZE.width / (double) TILE_SIZE) / CHUNK_SIZE) + 1;
+        //2
+        int chunksVertical = (int) ((Game.SIZE.height / (double)TILE_SIZE) / CHUNK_SIZE) + 1;
+
+        int x = - (chunksHorizontal / 2) * CHUNK_SIZE;
+        int y = - (chunksVertical / 2) * CHUNK_SIZE;
+
+        for (int i = 0; i < chunksHorizontal; i++) {
+            for (int j = 0; j < chunksVertical; j++) {
+                loadChunk(x + CHUNK_SIZE*i,y + CHUNK_SIZE * j);
+            }
+        }
+    }
+
+    private void loadChunk(int startX, int startY) {
+        Tile[][] chunk = generateChunk();
+
+        for (int x = 0; x < chunk.length; x++) {
+            for (int y = 0; y < chunk[x].length; y++) {
+                map.put(new Point(startX + x, startY + y), chunk[x][y]);
+            }
+        }
+    }
     /**
      * The number of tiles in each direction in one chunk
      */
@@ -24,7 +52,7 @@ public class Board {
         int x = -Math.floorDiv(cameraX, TILE_SIZE);
         int y = -Math.floorDiv(cameraY, TILE_SIZE);
         for (int i = x - 1; i <= x + Game.SIZE.width / TILE_SIZE; i++) {
-            for (int j = y -1; j <= y + Game.SIZE.height / TILE_SIZE ; j++) {
+            for (int j = y -2; j <= y + Game.SIZE.height / TILE_SIZE ; j++) {
                 g2d.setColor((i + j) % 2 == 0 ? Color.BLACK : Color.WHITE);
                 g2d.fillRect(i * TILE_SIZE,  j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
@@ -85,7 +113,6 @@ public class Board {
     public boolean hasPiece(Point p){
         return map.get(p).hasPiece();
     }
-
     public boolean isOpen(Point p) {
         Tile t = map.get(p);
         if (t != null) {
@@ -97,7 +124,6 @@ public class Board {
     public static void main(String[] args) {
         generateChunk();
     }
-
     private enum Spawnable {
         ITEM (2), ENEMY (2), /*COIN (4),*/ CLOSED( 1);
 
@@ -129,7 +155,7 @@ public class Board {
         final Tile[][] chunk = new Tile[CHUNK_SIZE][CHUNK_SIZE];
         /*int baseGoodness = CHUNK_SIZE*CHUNK_SIZE/2;
         int goodness = (int) ((baseGoodness / 2) * Game.RANDOM.nextGaussian());*/
-        int noToSpawn = Game.RANDOM.nextInt(4,8)
+        int noToSpawn = Game.RANDOM.nextInt(CHUNK_SIZE,CHUNK_SIZE*CHUNK_SIZE / 2);
         Tile[] filledTiles = new Tile[noToSpawn];
         for (int i = 0; i < noToSpawn; i++) {
             Spawnable spawnable = Spawnable.getRandomWeighted();
@@ -157,11 +183,20 @@ public class Board {
         {
             int x = Game.RANDOM.nextInt(CHUNK_SIZE);
             int y = Game.RANDOM.nextInt(CHUNK_SIZE);
-            while(chunk[x][y] == null)
+            while(chunk[x][y] != null)
             {
-                chunk[x][y] = t;
                 x = Game.RANDOM.nextInt(CHUNK_SIZE);
                 y = Game.RANDOM.nextInt(CHUNK_SIZE);
+            }
+            chunk[x][y] = t;
+        }
+
+        for (int x = 0; x < chunk.length; x++) {
+            for (int y = 0; y < chunk[x].length; y++) {
+                if(chunk[x][y] == null)
+                {
+                    chunk[x][y] = new OpenTile();
+                }
             }
         }
         return chunk;

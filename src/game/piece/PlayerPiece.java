@@ -15,7 +15,7 @@ public class PlayerPiece extends Piece {
      * @param target - coords of tile to move to
      */
     public void move(Point target) {
-        setPosition(target);
+        getPosition().setLocation(target);
         moved = true;
     }
 
