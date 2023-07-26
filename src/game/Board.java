@@ -61,14 +61,23 @@ public class Board {
     private static final int CHUNK_SIZE = 8;
     public static final int TILE_SIZE = 80;
 
-    public void render(Graphics2D g2d, int cameraX, int cameraY) {
+    public void render(Graphics2D g2d, int cameraX, int cameraY, Tile selected) {
         g2d.setColor(Color.WHITE);
         int x = -Math.floorDiv(cameraX, TILE_SIZE);
         int y = -Math.floorDiv(cameraY, TILE_SIZE);
         for (int i = x - 1; i <= x + Game.SIZE.width / TILE_SIZE; i++) {
             for (int j = y - 2; j <= y + Game.SIZE.height / TILE_SIZE; j++) {
-                g2d.setColor((i + j) % 2 == 0 ? Color.BLACK : /**Color.WHITE)*/new Color(255, 210, 153, 255));
+                g2d.setColor((i + j) % 2 == 0 ? Color.BLACK : /*Color.WHITE)*/new Color(255, 210, 153, 255));
                 g2d.fillRect(i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
+        }
+        if(selected != null) {
+            if (selected.hasPiece()) {
+                for (Point point : selected.getPiece().getMoveSet().getMoves()) {
+                    g2d.setColor(Color.YELLOW);
+                    g2d.fillRect(selected.getPiece().getPosition().x + point.x * TILE_SIZE,
+                            selected.getPiece().getPosition().y + point.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                }
             }
         }
     }

@@ -74,10 +74,11 @@ public class Game implements KeyListener {
      */
     void render(Graphics2D g2d) {
         g2d.translate(cameraX, cameraY);
-        board.render(g2d, (int) cameraX, (int) cameraY);
+        board.render(g2d, (int) cameraX, (int) cameraY, ui.getSelected());
         for (PlayerPiece piece : players) {
             piece.render(g2d);
         }
+
         g2d.translate(-cameraX, -cameraY);
         ui.render(g2d);
     }
@@ -114,11 +115,7 @@ public class Game implements KeyListener {
     public void mousePressed(double x, double y) {
         int tileX = (int)Math.floor((x - cameraX) / Board.TILE_SIZE);
         int tileY = (int)Math.floor((y - cameraY) / Board.TILE_SIZE);
-        if(ui.getSelected().hasPiece()) {
-            if (ui.getSelected().getPiece().isPlayer()) {
 
-            }
-        }
         ui.setSelected(board.getTile(new Point(tileX, tileY)));
     }
 

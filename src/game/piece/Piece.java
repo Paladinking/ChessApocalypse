@@ -145,6 +145,10 @@ public abstract class Piece {
 
     public abstract boolean isPlayer();
 
+    public MoveSet getMoveSet() {
+        return moveSet;
+    }
+
     public void attack(Piece target, Board board){
         target.setHealth(target.getHealth() - power);
         Point temp = target.getPosition();
