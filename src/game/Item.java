@@ -1,11 +1,16 @@
 package game;
 
+import java.awt.*;
+
 public abstract class Item {
 
-    public abstract int getGoodness();
-
+    private Point position;
     public static Item generateItem()
     {
-        return null;
+        return new Item(){};
     };
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
 }
