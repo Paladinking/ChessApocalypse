@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class App {
 
@@ -16,15 +19,17 @@ public class App {
                 public void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     Graphics2D g2d = (Graphics2D) g;
-                    Rectangle r = g2d.getClipBounds();
-                    final double scaling = Math.min((double)r.width / Game.SIZE.width,
-                            (double) r.height / Game.SIZE.height);
-                    g2d.setClip(0, (int)(r.height - scaling * Game.SIZE.height) / 2,
-                            r.width,
-                            r.height - (int)(r.height - scaling * Game.SIZE.height));
+                    Rectangle r = getBounds();
+                    final double scaling = Math.min((double) r.width / Game.VIEWPORT.width,
+                            (double) r.height / Game.VIEWPORT.height);
+                    double heightDiff = (r.height - scaling * Game.VIEWPORT.height) / 2.0;
+                    double widthDiff = (r.width - scaling * Game.VIEWPORT.width) / 2.0;
+                    g2d.setClip((int) widthDiff, (int) heightDiff,
+                            (int) (scaling * Game.VIEWPORT.width),
+                            (int) (scaling * Game.VIEWPORT.height));
                     g2d.scale(scaling, scaling);
-                    g2d.translate((int)(r.width / scaling - Game.SIZE.width) / 2,
-                            (int)(r.height / scaling - Game.SIZE.height) / 2);
+                    g2d.translate((int) (r.width / scaling - Game.VIEWPORT.width) / 2,
+                            (int) (r.height / scaling - Game.VIEWPORT.height) / 2);
                     game.render(g2d);
                 }
             };
@@ -34,18 +39,28 @@ public class App {
             panel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    Point2D.Double relMousePos = getGameCoordinates(e.getX(), e.getY());
+                    if (Game.VIEWPORT.contains(relMousePos)) {
+                        game.mousePressed(relMousePos.x, relMousePos.y);
+                    }
+                }
+
+                private Point2D.Double getGameCoordinates(double mouseX, double mouseY) {
                     Rectangle r = panel.getBounds();
-                    final double scaling = Math.max(Game.SIZE.width / (double)r.width,
-                            Game.SIZE.height / (double) r.height);
-                    game.mousePressed(e.getX() * scaling, e.getY() * scaling);
+                    final double scaling = Math.max(Game.VIEWPORT.width / (double) r.width,
+                            Game.VIEWPORT.height / (double) r.height);
+                    double heightDiff = (r.height - Game.VIEWPORT.height / scaling) / 2.0;
+                    double widthDiff = (r.width - Game.VIEWPORT.width / scaling) / 2.0;
+                    double x = mouseX - widthDiff, y = mouseY - heightDiff;
+                    return new Point2D.Double(x * scaling, y * scaling);
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    Rectangle r = panel.getBounds();
-                    final double scaling = Math.max(Game.SIZE.width / (double)r.width,
-                            Game.SIZE.height / (double) r.height);
-                    game.mouseReleased(e.getX() * scaling, e.getY() * scaling);
+                    Point2D.Double relMousePos = getGameCoordinates(e.getX(), e.getY());
+                    if (Game.VIEWPORT.contains(relMousePos)) {
+                        game.mouseReleased(relMousePos.x, relMousePos.y);
+                    }
                 }
             });
             frame.setResizable(false);
