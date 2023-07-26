@@ -35,7 +35,7 @@ public abstract class Piece {
         images = loaded_images;
     }
 
-    protected enum PieceType implements Weighted {
+    public enum PieceType implements Weighted {
         KNIGHT(new MoveSet().withSymmetricMoves(2, 1)),
         PAWN(new MoveSet().withSymmetricMoves(1, 0));
 
