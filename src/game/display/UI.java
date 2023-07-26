@@ -10,9 +10,9 @@ public class UI {
     private Board.Tile selected;
     public UI() {
         buttons = new ArrayList<>();
-        Button peiceButton = new PieceButton((int)(0.5* Board.TILE_SIZE), (int)(0.5 * Board.TILE_SIZE),
+        Button pieceButton = new PieceButton((int)(0.5* Board.TILE_SIZE), (int)(0.5 * Board.TILE_SIZE),
                 Board.TILE_SIZE, Board.TILE_SIZE);
-        buttons.add(peiceButton);
+        buttons.add(pieceButton);
     }
 
     public void render(Graphics2D gd2){

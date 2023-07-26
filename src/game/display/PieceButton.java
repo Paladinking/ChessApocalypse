@@ -14,7 +14,7 @@ public class PieceButton extends Button{
         super.render(g2d, selected);
         if(selected != null) {
             if (selected.hasPiece()) {
-                //Ska ritta pjäs
+                //Ska rita pjäs
 
             }
         }
