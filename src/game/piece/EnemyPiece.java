@@ -3,10 +3,8 @@ package game.piece;
 import game.Board;
 
 import java.awt.*;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class EnemyPiece extends Piece {
 
@@ -36,7 +34,7 @@ public class EnemyPiece extends Piece {
     private record Node(Point pos, Node parent, int cost) {
     }
 
-    public Point moveTowards(Point goal, Board board) {
+    public ArrayDeque<Point> moveTowards(Point goal, Board board, int steps) {
         PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(p ->
                 p.cost + Math.abs(p.pos.x - goal.x) + Math.abs(p.pos.y - goal.y)));
         HashSet<Point> visited = new HashSet<>();
@@ -49,11 +47,16 @@ public class EnemyPiece extends Piece {
             if (n.pos.x == goal.x && n.pos.y == goal.y) {
                 if (n.parent == null) return null;
                 Node next = n.parent;
+                ArrayDeque<Point> res = new ArrayDeque<>();
                 while (next.parent != null) {
+                    res.push(n.pos);
                     n = next;
                     next = next.parent;
                 }
-                return n.pos;
+                for (int i = 0; i < res.size() - steps; i++) {
+                    res.removeFirst();
+                }
+                return res;
             }
             for (Point move : getMoveSet().getMoves()) {
                 Point next = new Point(n.pos.x + move.x, n.pos.y + move.y);
