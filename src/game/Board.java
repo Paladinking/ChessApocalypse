@@ -121,28 +121,18 @@ public class Board {
         return true;
     }
 
-    public static void main(String[] args) {
-        generateChunk();
-    }
-    private enum Spawnable {
-        ITEM (2), ENEMY (2), /*COIN (4),*/ CLOSED( 1);
+    private enum Spawnable implements Weighted {
+        ITEM, ENEMY, /*COIN,*/ CLOSED;
 
-        private Spawnable(int weight) {
-            this.weight = weight;
+        public int getWeight() {
+            return switch (this) {
+                case ITEM, ENEMY -> 2;
+                case CLOSED -> 1;
+            };
         }
-        public final int weight;
 
         public static Spawnable getRandomWeighted() {
-            int weightSum = Arrays.stream(Spawnable.values()).map(s->s.weight).reduce(0, Integer::sum);
-            ArrayList<Spawnable> weightedList = new ArrayList<>(weightSum);
-            for(Spawnable s : Spawnable.values())
-            {
-                for(int i = 0; i < s.weight; i++)
-                {
-                    weightedList.add(s);
-                }
-            }
-            return weightedList.get(Game.RANDOM.nextInt(weightSum));
+            return (Spawnable) Weighted.getRandomWeighted(values());
         }
     }
 

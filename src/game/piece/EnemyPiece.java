@@ -10,15 +10,15 @@ public class EnemyPiece extends Piece {
 
     private static final int MAX_RANGE = 20;
 
-    public EnemyPiece(int x, int y, int health) {
-        super(x, y, health);
+    public EnemyPiece(int x, int y, int health, PieceType pieceType) {
+        super(x, y, health, pieceType.moveSet);
     }
 
-    public EnemyPiece(int health) {
-        super(health);
+    public EnemyPiece(int health, PieceType pieceType) {
+        super(health, pieceType.moveSet);
     }
     public static Piece generateEnemy() {
-        return new EnemyPiece(2 );
+        return new EnemyPiece(2, PieceType.getRandomWeighted());
     }
 
     @Override
@@ -40,12 +40,12 @@ public class EnemyPiece extends Piece {
         HashSet<Point> visited = new HashSet<>();
         int iterations = 0;
         queue.add(new Node(getPosition(), null, 0));
-        final int MAX_ITERATIONS = 10000;
+        final int MAX_ITERATIONS = 10_000;
         while (!queue.isEmpty() && iterations < MAX_ITERATIONS) {
             iterations++;
             Node n = queue.remove();
             if (n.pos.x == goal.x && n.pos.y == goal.y) {
-                if (n.parent == null) return null;
+                if (n.parent == null) return new ArrayDeque<>();
                 Node next = n.parent;
                 ArrayDeque<Point> res = new ArrayDeque<>();
                 while (next.parent != null) {
@@ -58,16 +58,16 @@ public class EnemyPiece extends Piece {
                 }
                 return res;
             }
-            for (Point move : getMoveSet().getMoves()) {
+            for (Point move : moveSet.getMoves()) {
                 Point next = new Point(n.pos.x + move.x, n.pos.y + move.y);
                 if (board.isOpen(next) && !visited.contains(next)) {
-                    Node neighbor = new Node(next, n, n.cost + Math.abs(move.x) + Math.abs(move.y));
+                    Node neighbor = new Node(next, n, n.cost + 1);
                     queue.add(neighbor);
                     visited.add(next);
                 }
             }
         }
-        return null;
+        return new ArrayDeque<>();
     }
 
     public void update(Board board, List<PlayerPiece> players) {
@@ -82,7 +82,7 @@ public class EnemyPiece extends Piece {
             }
         }
         if (closest != null) {
-            Point move = moveTowards(closest.getPosition(), board);
+            Point move = moveTowards(closest.getPosition(), board, 1).poll();
             if (move != null) {
 
             }

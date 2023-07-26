@@ -107,10 +107,6 @@ public class Game implements KeyListener {
         int tileX = (int)Math.floor((x - cameraX) / Board.TILE_SIZE);
         int tileY = (int)Math.floor((y - cameraY) / Board.TILE_SIZE);
 
-        EnemyPiece piece = new EnemyPiece(10, 10, 10);
-        Point p = piece.moveTowards(new Point(tileX, tileY), board);
-
-        System.out.println("Pressed " + tileX + ", " + tileY + " : " + p);
     }
 
     public void mouseReleased(double x, double y) {
